@@ -138,7 +138,6 @@ noremap ; :
 noremap Q :q<CR>
 " noremap <C-q> :qa<CR>
 noremap S :w<CR>
-
 " Disabling the default s key
 noremap s <nop>
 
@@ -329,7 +328,6 @@ Plug 'google/vim-codefmt'
 
 " File navigation
 Plug 'junegunn/fzf.vim'
-Plug 'pechorin/any-jump.vim'
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 
 " Taglist
@@ -430,7 +428,7 @@ hi illuminatedWord cterm=undercurl gui=undercurl
 " ===
 augroup autoformat_settings
   autocmd FileType bzl AutoFormatBuffer buildifier
-  "autocmd FileType c,cpp,proto,javascript,arduino AutoFormatBuffer clang-format
+  autocmd FileType c,cpp,proto,javascript,arduino AutoFormatBuffer clang-format
   autocmd FileType dart AutoFormatBuffer dartfmt
   autocmd FileType go AutoFormatBuffer gofmt
   autocmd FileType gn AutoFormatBuffer gn
@@ -452,14 +450,6 @@ let g:indentLine_setColors = 0
 let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_first_char = '|'
 
-
-
-" ===
-" === any-jump
-" ===
-nnoremap <c-j>   :AnyJump<CR>
-let g:any_jump_window_width_ratio  = 0.8
-let g:any_jump_window_height_ratio = 0.9
 
 " ===
 " === Leaderf
@@ -668,13 +658,6 @@ noremap \p :echo expand('%:p')<CR>
 
 
 " ===
-" === vim-illuminate
-" ===
-let g:Illuminate_delay = 750
-hi illuminatedWord cterm=undercurl gui=undercurl
-
-
-" ===
 " === vim-rooter
 " ===
 let g:rooter_patterns = ['__vim_project_root', '.git/']
@@ -712,9 +695,6 @@ let g:go_mod_fmt_autosave                    = 1
 autocmd FileType go noremap gk :GoDoc<CR>
 autocmd FileType go noremap gta :GoTest<CR>
 autocmd FileTYpe go noremap gtt :GoTestFunc<CR>
-
-
-
 
 
 
