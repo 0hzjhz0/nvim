@@ -13,7 +13,7 @@
 " === System
 " ===
 filetype on
-iletype indent on      " 开启文件类型检查
+filetype indent on      " 开启文件类型检查
 filetype plugin on
 filetype plugin indent on
 set nocompatible        " 不兼容 Vi
@@ -90,3 +90,82 @@ set noshowmatch         " 自动匹配括号引号等字符
 
 " Restore Cursor Position
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" ===========================
+" ====== Basic Mappings ======
+" ============================
+let mapleader=" "
+" Open the vimrc file anytime
+noremap <LEADER>rc :e $HOME/AppData/Local/nvim/init.vim<CR>
+
+" ===
+" === Normal Mode
+" ===
+noremap ; :
+" Save & quit
+noremap Q :q<CR>
+noremap S :w<CR>
+" Disable the default s key
+noremap s <nop>
+" Indentation
+noremap < <<
+noremap > >>
+" Press ` to change case (instead of ~)
+noremap ` ~
+ " make Y to copy till the end of the line
+noremap Y y$
+" Search
+noremap - N
+noremap = n
+noremap <LEADER><CR> :nohlsearch<CR>
+
+" Press space twice to jump to the next '<++>' and edit it
+noremap <LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>c4l
+" Folding
+noremap <silent> <c-o> za
+" Opening a terminal window
+noremap <leader>/ :set splitbelow<cr> :sp<cr> :term<cr>
+
+" ===
+" === Insert Mode
+" ===
+inoremap <C-a> <ESC>A
+inoremap <C-i> <ESC>I
+
+" ===
+" === Window management
+" ===
+" Create a new window: split the screens to up(horizontal), down(horizontal), left(vertical),
+" right(vertical)
+map sk :set nosplitbelow<CR>:split<CR>:set splitbelow<CR>
+map sj :set splitbelow<CR>:split<CR>
+map sh :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
+map sl :set splitright<CR>:vsplit<CR>
+
+" Rotate screens
+noremap wh <C-w>b<C-w>K
+noremap wl <C-w>b<C-w>H
+
+" Use <space> + new arrow keys for moving the cursor around windows
+map <LEADER>k <C-w>k
+map <LEADER>j <C-w>j
+map <LEADER>h <C-w>h
+map <LEADER>l <C-w>l
+
+" Resize splits with arrow keys
+map ek :res +5<CR>
+map ej :res -5<CR>
+map eh :vertical resize-5<CR>
+map el :vertical resize+5<CR>
+
+" ===
+" === Tab management
+" ===
+" Create a new tab with tk
+map ta :tabe<CR>
+" Move around tabs with th and tl
+map th :-tabnext<CR>
+map tl :+tabnext<CR>
+" Move the tabs with tk and tj
+map tj :-tabmove<CR>
+map tk :+tabmove<CR>=
