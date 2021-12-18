@@ -176,8 +176,10 @@ map tk :+tabmove<CR>=
 call plug#begin('$HOME/.config/nvim/plugged')
 " color scheme
 Plug 'ajmwagar/vim-deus'
+
 " status line
 Plug 'itchyny/lightline.vim'
+
 " tab line
 Plug 'mg979/vim-xtabline'
 Plug 'ryanoasis/vim-devicons'
@@ -185,17 +187,35 @@ Plug 'ryanoasis/vim-devicons'
 " display the colours in the file(#rgb)
 "Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' }
 Plug 'ap/vim-css-color'
+
 " highlighting other uses of the word under the cursor
 Plug 'RRethy/vim-illuminate'
+
+" File navigation
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
+" Plug 'kevinhwang91/rnvimr'
+" Plug 'airblade/vim-rooter'
+Plug 'pechorin/any-jump.vim'
+
+" Taglist
+Plug 'liuchengxu/vista.vim'
+
 
 
 call plug#end()
 
-" =============================
-" ====== dress up my vim ======
-" =============================
+" ======================================
+" ====== Start of Plugin Settings ======
+" ======================================
+" ===
+" === Dress up my vim
+" ===
 set termguicolors          " enable true color support
 colorscheme deus
+hi NonText ctermfg=gray guifg=grey10
+
 " setup for lightline
 set noshowmode
 let g:lightline = {
@@ -215,6 +235,83 @@ let g:xtabline_settings.last_open_first = 1
 let g:xtabline_settings.tab_number_in_left_corner = 0
 let g:xtabline_settings.theme = 'tomorrow'
 noremap \p :echo expand('%:p')<CR>
+
+" ===
+" === vim-illuminate
+" ===
+let g:Illuminate_delay = 750
+hi illuminatedWord cterm=undercurl gui=undercurl
+
+
+" ===
+" === FZF
+" ===
+nnoremap <c-p> :Leaderf file<CR>
+noremap <silent> <C-f> :Rg<CR>
+noremap <silent> <C-h> :History<CR>
+noremap <silent> <C-w> :Buffers<CR>
+
+let g:fzf_preview_window = 'right:60%'
+let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+
+function! s:list_buffers()
+  redir => list
+  silent ls
+  redir END
+  return split(list, "\n")
+endfunction
+
+function! s:delete_buffers(lines)
+  execute 'bwipeout' join(map(a:lines, {_, line -> split(line)[0]}))
+endfunction
+
+command! BD call fzf#run(fzf#wrap({
+  \ 'source': s:list_buffers(),
+  \ 'sink*': { lines -> s:delete_buffers(lines) },
+  \ 'options': '--multi --reverse --bind ctrl-a:select-all+accept'
+\ }))
+
+noremap <c-d> :BD<CR>
+
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
+
+" ===
+" === Leaderf
+" ===
+" let g:Lf_WindowPosition = 'popup'
+let g:Lf_PreviewInPopup = 1
+let g:Lf_PreviewCode = 1
+let g:Lf_ShowHidden = 1
+let g:Lf_ShowDevIcons = 1
+let g:Lf_CommandMap = {
+\   '<C-k>': ['<C-u>'],
+\   '<C-j>': ['<C-e>'],
+\   '<C-]>': ['<C-v>'],
+\   '<C-p>': ['<C-n>'],
+\}
+let g:Lf_UseVersionControlTool = 0
+let g:Lf_IgnoreCurrentBufferName = 1
+let g:Lf_WildIgnore = {
+        \ 'dir': ['.git', 'vendor', 'node_modules'],
+        \ 'file': ['__vim_project_root', 'class']
+        \}
+let g:Lf_UseMemoryCache = 0
+let g:Lf_UseCache = 0
+
+" ===
+" === Vista.vim
+" ===
+noremap <LEADER>t :Vista!!<CR>
+noremap <c-t> :silent! Vista finder coc<CR>
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+let g:vista_default_executive = 'coc'
+let g:vista_fzf_preview = ['right:50%']
+let g:vista#renderer#enable_icon = 1
+let g:vista#renderer#icons = {
+\   "function": "\uf794",
+\   "variable": "\uf71b",
+\  }
+
 
 " ===
 " === Necessary Commands to Execute
