@@ -96,7 +96,7 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 " ============================
 let mapleader=" "
 " Open the vimrc file anytime
-noremap <LEADER>rc :e $HOME/AppData/Local/nvim/init.vim<CR>
+noremap <LEADER>rc :e $HOME/.config/nvim/init.vim<CR>
 
 " ===
 " === Normal Mode
@@ -169,3 +169,74 @@ map tl :+tabnext<CR>
 " Move the tabs with tk and tj
 map tj :-tabmove<CR>
 map tk :+tabmove<CR>=
+
+" ==========================================
+" ====== Install Plugins with Vim-Plug ======
+" ===========================================
+call plug#begin('$HOME/.config/nvim/plugged')
+" color scheme
+Plug 'ajmwagar/vim-deus'
+" status line
+Plug 'itchyny/lightline.vim'
+" tab line
+Plug 'mg979/vim-xtabline'
+Plug 'ryanoasis/vim-devicons'
+
+" display the colours in the file(#rgb)
+"Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' }
+Plug 'ap/vim-css-color'
+" highlighting other uses of the word under the cursor
+Plug 'RRethy/vim-illuminate'
+
+
+call plug#end()
+
+" =============================
+" ====== dress up my vim ======
+" =============================
+set termguicolors          " enable true color support
+colorscheme deus
+" setup for lightline
+set noshowmode
+let g:lightline = {
+      "\ 'colorscheme': 'deus',
+      \ 'colorscheme': 'wombat',
+      \ }
+
+" ===
+" === xtabline
+" ===
+set showtabline=2
+let g:xtabline_settings = {}
+let g:xtabline_settings.enable_mappings = 0
+let g:xtabline_settings.tabline_modes = ['tabs', 'buffers']
+let g:xtabline_settings.enable_persistance = 0
+let g:xtabline_settings.last_open_first = 1
+let g:xtabline_settings.tab_number_in_left_corner = 0
+let g:xtabline_settings.theme = 'tomorrow'
+noremap \p :echo expand('%:p')<CR>
+
+" ===
+" === Necessary Commands to Execute
+" ===
+exec "nohlsearch"
+
+
+" ===
+" === Terminal Colors
+" ===
+let g:terminal_color_0 = '#000000'
+let g:terminal_color_1 = '#FF5555'
+let g:terminal_color_2 = '#50FA7B'
+let g:terminal_color_3 = '#F1FA8C'
+let g:terminal_color_4 = '#BD93F9'
+let g:terminal_color_5 = '#FF79C6'
+let g:terminal_color_6 = '#8BE9FD'
+let g:terminal_color_7 = '#BFBFBF'
+let g:terminal_color_8 = '#4D4D4D'
+let g:terminal_color_9 = '#FF6E67'
+let g:terminal_color_10 = '#5AF78E'
+let g:terminal_color_11 = '#F4F99D'
+let g:terminal_color_12 = '#CAA9FA'
+let g:terminal_color_13 = '#FF92D0'
+let g:terminal_color_14 = '#9AEDFE'
