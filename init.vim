@@ -22,6 +22,8 @@ set encoding=utf-8
 set clipboard=unnamed   " 打开系统剪切版
 set showmode            " 显示模式f
 
+
+
 " Fix incorect backgroud rendering in st
 let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
@@ -90,6 +92,16 @@ set noshowmatch         " 自动匹配括号引号等字符
 
 " Restore Cursor Position
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" ===
+" === coc.nvim 的配置
+" ===
+set hidden
+set nobackup
+set nowritebackup
+set cmdheight=1
+set shortmess+=c
+set signcolumn=number
 
 " ===========================
 " ====== Basic Mappings ======
@@ -178,7 +190,8 @@ call plug#begin('$HOME/.config/nvim/plugged')
 Plug 'ajmwagar/vim-deus'
 
 " status line
-Plug 'itchyny/lightline.vim'
+Plug 'theniceboy/eleline.vim'
+Plug 'ojroques/vim-scrollstatus'
 
 " tab line
 Plug 'mg979/vim-xtabline'
@@ -192,12 +205,10 @@ Plug 'ap/vim-css-color'
 Plug 'RRethy/vim-illuminate'
 
 " File navigation
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
-" Plug 'kevinhwang91/rnvimr'
-" Plug 'airblade/vim-rooter'
-Plug 'pechorin/any-jump.vim'
+
+" Auto Complete
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'wellle/tmux-complete.vim'
 
 " Taglist
 Plug 'liuchengxu/vista.vim'
@@ -215,14 +226,11 @@ call plug#end()
 set termguicolors          " enable true color support
 colorscheme deus
 hi NonText ctermfg=gray guifg=grey10
-
-" setup for lightline
-set noshowmode
-let g:lightline = {
-      "\ 'colorscheme': 'deus',
-      \ 'colorscheme': 'wombat',
-      \ }
-
+" ===
+" === eleline
+" ===
+let g:airline_powerline_fonts = 0
+let g:scrollstatus_size = 12
 " ===
 " === xtabline
 " ===
@@ -242,62 +250,6 @@ noremap \p :echo expand('%:p')<CR>
 let g:Illuminate_delay = 750
 hi illuminatedWord cterm=undercurl gui=undercurl
 
-
-" ===
-" === FZF
-" ===
-nnoremap <c-p> :Leaderf file<CR>
-noremap <silent> <C-f> :Rg<CR>
-noremap <silent> <C-h> :History<CR>
-noremap <silent> <C-w> :Buffers<CR>
-
-let g:fzf_preview_window = 'right:60%'
-let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
-
-function! s:list_buffers()
-  redir => list
-  silent ls
-  redir END
-  return split(list, "\n")
-endfunction
-
-function! s:delete_buffers(lines)
-  execute 'bwipeout' join(map(a:lines, {_, line -> split(line)[0]}))
-endfunction
-
-command! BD call fzf#run(fzf#wrap({
-  \ 'source': s:list_buffers(),
-  \ 'sink*': { lines -> s:delete_buffers(lines) },
-  \ 'options': '--multi --reverse --bind ctrl-a:select-all+accept'
-\ }))
-
-noremap <c-d> :BD<CR>
-
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
-
-" ===
-" === Leaderf
-" ===
-" let g:Lf_WindowPosition = 'popup'
-let g:Lf_PreviewInPopup = 1
-let g:Lf_PreviewCode = 1
-let g:Lf_ShowHidden = 1
-let g:Lf_ShowDevIcons = 1
-let g:Lf_CommandMap = {
-\   '<C-k>': ['<C-u>'],
-\   '<C-j>': ['<C-e>'],
-\   '<C-]>': ['<C-v>'],
-\   '<C-p>': ['<C-n>'],
-\}
-let g:Lf_UseVersionControlTool = 0
-let g:Lf_IgnoreCurrentBufferName = 1
-let g:Lf_WildIgnore = {
-        \ 'dir': ['.git', 'vendor', 'node_modules'],
-        \ 'file': ['__vim_project_root', 'class']
-        \}
-let g:Lf_UseMemoryCache = 0
-let g:Lf_UseCache = 0
-
 " ===
 " === Vista.vim
 " ===
@@ -312,6 +264,70 @@ let g:vista#renderer#icons = {
 \   "variable": "\uf71b",
 \  }
 
+" ===
+" === coc.nvim
+" ===
+" some plugins
+let g:coc_global_extensions = [
+	\ 'coc-css',
+	\ 'coc-diagnostic',
+	\ 'coc-docker',
+	\ 'coc-eslint',
+	\ 'coc-explorer',
+	\ 'coc-flutter-tools',
+	\ 'coc-gitignore',
+	\ 'coc-html',
+	\ 'coc-import-cost',
+	\ 'coc-java',
+	\ 'coc-jest',
+	\ 'coc-json',
+	\ 'coc-lists',
+	\ 'coc-omnisharp',
+	\ 'coc-prettier',
+	\ 'coc-prisma',
+	\ 'coc-pyright',
+	\ 'coc-snippets',
+	\ 'coc-sourcekit',
+	\ 'coc-stylelint',
+	\ 'coc-syntax',
+	\ 'coc-tailwindcss',
+	\ 'coc-tasks',
+	\ 'coc-translator',
+	\ 'coc-tsserver',
+	\ 'coc-vetur',
+	\ 'coc-vimlsp',
+	\ 'coc-yaml',
+	\ 'coc-yank',
+	\ 'https://github.com/rodrigore/coc-tailwind-intellisense']
+" Use tab for trigger completion with characters ahead and navigate.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+" Use <c-o> to trigger completion.
+inoremap <silent><expr> <c-o> coc#refresh()
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+"nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nmap <leader>rn <Plug>(coc-rename)
 
 " ===
 " === Necessary Commands to Execute
